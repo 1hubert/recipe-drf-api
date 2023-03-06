@@ -17,7 +17,8 @@ class UserManager(BaseUserManager):
         """Create, save and return a new user."""
         # Because our manager is associated to a model, we need to access the model that we are associated with
         # self.model is the same as defining a new user class
-        user = self.model(email=email, **extra_fields)
+        # The normalize email method is provided from BaseUserManager
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
