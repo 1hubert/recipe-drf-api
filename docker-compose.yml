@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+# Use the current directory
+      context: .
+      args:
+        - DEV=true
+    ports:
+      - "8000:8000"
+    volumes:
+# Everything we create inside of our container gets mapped to our project, and everything we create inside of our project gets mapped to our container
+      - ./app:/app
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
