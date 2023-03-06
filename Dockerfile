@@ -31,16 +31,21 @@ ARG DEV=false
 RUN python -m venv /py && \
 # Upgrade pip
     /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
 # Install dependencies listed in requirements.txt (the containerised txt file)
     /py/bin/pip install -r /tmp/requirements.txt && \
 
 # If DEV=true install dev dependencies. The "fi" ends and if statement
-if [ $DEV = true ]; \
-    then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
-fi && \
+    if [ $DEV = true ]; \
+        then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
+    fi && \
 
 # Remove the temporary directory. It's best practice to keep Docker images as lightweight as possible
     rm -rf /tmp && \
+    apk del .tmp-build-deps && \
+
 # Add a new Alpine OS User. It's not recommended to run your application using the root user
     adduser \
         --disabled-password \
