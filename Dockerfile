@@ -31,9 +31,11 @@ ARG DEV=false
 RUN python -m venv /py && \
 # Upgrade pip
     /py/bin/pip install --upgrade pip && \
-    apk add --update --no-cache postgresql-client && \
+# These deps are not going to be deleted
+    apk add --update --no-cache postgresql-client jpeg-dev && \
     apk add --update --no-cache --virtual .tmp-build-deps \
-        build-base postgresql-dev musl-dev && \
+# These deps are GOING TO BE DELETED LATER
+        build-base postgresql-dev musl-dev zlib zlib-dev && \
 # Install dependencies listed in requirements.txt (the containerised txt file)
     /py/bin/pip install -r /tmp/requirements.txt && \
 
@@ -50,7 +52,15 @@ RUN python -m venv /py && \
     adduser \
         --disabled-password \
         --no-create-home \
-        django-user
+        django-user && \
+    mkdir -p /vol/web/media && \
+    mkdir -p /vol/web/static && \
+# chown - change owner
+# We're setting the user of /vol to django-user and the GROUP to django-user
+    chown -R django-user:django-user /vol && \
+# chmod - change mode
+# Now the owner of that directory can make any changes to subdirectories/files
+    chmod -R 755 /vol
 
 # Update the PATH environmental variable
 # PATH is an automatically created variable on linux that defines all executables that can be run
