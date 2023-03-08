@@ -38,7 +38,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 # mixins.ListModelMixin - allows you to add listing functionality
-class TagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+# The order is important
+class TagViewSet(mixins.UpdateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """Manage tags in the database."""
     serializer_class = serializers.TagSerializer
     queryset = Tag.objects.all()
