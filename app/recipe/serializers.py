@@ -89,7 +89,8 @@ class RecipeDetailSerializer(RecipeSerializer):
     """Serializer for recipe detail view."""
 
     class Meta(RecipeSerializer.Meta):
-        # Remove 'image' so that image link is not visible from "recipe object" json
+        # Remove 'image' so that image link is not
+        # visible from "recipe object" json
         fields = RecipeSerializer.Meta.fields + ['description', 'image']
 
 
