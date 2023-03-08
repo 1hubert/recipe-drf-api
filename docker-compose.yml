@@ -13,7 +13,6 @@ services:
 # Everything we create inside of our container gets mapped to our project, and everything we create inside of our project gets mapped to our container
       - ./app:/app
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
@@ -24,7 +23,7 @@ services:
       - DB_PASSWORD=changeme
     depends_on:
       - db
-  
+
   db:
     image: postgres:13-alpine
     volumes:

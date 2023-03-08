@@ -38,7 +38,7 @@ RUN python -m venv /py && \
     /py/bin/pip install -r /tmp/requirements.txt && \
 
 # If DEV=true install dev dependencies. The "fi" ends and if statement
-    if [ $DEV = true ]; \
+    if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
 
@@ -58,4 +58,3 @@ ENV PATH="/py/bin:$PATH"
 
 # Switch to django-user from root
 USER django-user
-    
