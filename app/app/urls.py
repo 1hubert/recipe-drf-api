@@ -40,7 +40,3 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_URL
     )
-
-SPECTACULAR_SETTINGS = {
-    'COMPONENT_SPLIT_REQUEST': True,
-}
