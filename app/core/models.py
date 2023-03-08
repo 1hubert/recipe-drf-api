@@ -18,7 +18,8 @@ class UserManager(BaseUserManager):
         """Create, save and return a new user."""
         if not email:
             raise ValueError('User must have an email address.')
-        # Because our manager is associated to a model, we need to access the model that we are associated with
+        # Because our manager is associated to a model, we need to access
+        # the model that we are associated with
         # self.model is the same as defining a new user class
         # The normalize email method is provided from BaseUserManager
         user = self.model(email=self.normalize_email(email), **extra_fields)
