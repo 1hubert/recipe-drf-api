@@ -14,6 +14,7 @@ ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./app /app
+COPY ./scripts /scripts
 
 # Set default directory for running commands to where the Django project will be
 WORKDIR /app
@@ -35,7 +36,7 @@ RUN python -m venv /py && \
     apk add --update --no-cache postgresql-client jpeg-dev && \
     apk add --update --no-cache --virtual .tmp-build-deps \
 # These deps are GOING TO BE DELETED LATER
-        build-base postgresql-dev musl-dev zlib zlib-dev && \
+        build-base postgresql-dev musl-dev zlib zlib-dev linux-headers && \
 # Install dependencies listed in requirements.txt (the containerised txt file)
     /py/bin/pip install -r /tmp/requirements.txt && \
 
@@ -60,11 +61,14 @@ RUN python -m venv /py && \
     chown -R django-user:django-user /vol && \
 # chmod - change mode
 # Now the owner of that directory can make any changes to subdirectories/files
-    chmod -R 755 /vol
+    chmod -R 755 /vol && \
+    chmod -R +x /scripts
 
 # Update the PATH environmental variable
 # PATH is an automatically created variable on linux that defines all executables that can be run
-ENV PATH="/py/bin:$PATH"
+ENV PATH="/scripts:/py/bin:$PATH"
 
 # Switch to django-user from root
 USER django-user
+
+CMD["run.sh"]
